@@ -1,0 +1,11 @@
+#Docker buid image IBM Domino 9.0.1
+docker build -t vs/domino:9.0.1 -f Dockerfile_domino901_ubuntu.txt .
+
+#Docker buid image IBM Domino 9.0.1 FP7
+docker build -t vs/domino:9.0.1-fp7 -f Dockerfile_domino901_fp7_ubuntu.txt .
+
+#Docker buid production image of IBM Domino 9.0.1 FP7 server
+docker build -t vs/domino_main:1 -f Dockerfile_domino_setup.txt .
+
+#Run container for the image "vs/domino_main:1"
+docker run -it -p 8585:8585 -p 1352:1352 -p 8888:80 -p 8443:443  --name domino_main -v /docker/domino_main:/lacal/notesdata vs/domino_main:1

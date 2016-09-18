@@ -1,0 +1,122 @@
+#!/bin/bash
+# change this to #!/bin/ksh for AIX and Solaris
+########################################################################
+# RC RunLevel Entry Point
+########################################################################
+# Start/Stop Script for Domino on xLinux/zLinux/AIX/Solaris
+# 2005-2013 Copyright by Daniel Nashed, feedback domino_unix@nashcom.de
+# You may use and distribute the unmodified version of this script.
+# Use at your own risk. No implied or specific warranties are given.
+# You may change it for your own usage only
+# Version 2.7 01.09.2013
+########################################################################
+# chkconfig: 345 66 19
+# description: Lotus Domino Server
+
+### BEGIN INIT INFO
+# Provides: rc_domino
+# Required-Start: $remote_fs $syslog $network
+# Required-Stop:  $remote_fs $syslog
+# Default-Start:  3 5
+# Default-Stop:   0 1 2 6
+# Short-Description: IBM Lotus Domino Server (notes)
+# Description:       IBM Lotus Domino Server (notes)
+#       Start/Stop Script V2.6 for xLinux/zLinux/AIX/Solaris
+#       2005-2013 Copyright by Daniel Nashed (domino_unix@nashcom.de)
+
+### END INIT INFO
+
+# Optional get the name from script name e.g. 'domino_notes1"
+#DOMINO_USER=`basename $0 | cut -f 2 -d _`
+
+# Set default user to "notes" if no user is specified
+if [ -z "$DOMINO_USER" ] ; then
+  DOMINO_USER={{ domino_user }}
+fi
+
+# Specify the location of the main script
+DOMINO_START_SCRIPT=/opt/ibm/domino/rc_domino_script
+# change for Domino 9 --> DOMINO_START_SCRIPT=/opt/ibm/domino/rc_domino_script
+SWITCH_USER=0
+
+# Starting a server always needs a switch to the right run-time environment
+if [ "$LOGNAME" = "$DOMINO_USER" ] ; then
+
+  if [ "$1" = "start" ] ; then
+    SWITCH_USER=1
+  elif [ "$1" = "restart" ] ; then
+    SWITCH_USER=1
+  fi
+else
+  # If you are running on non-Solaris platforms you might get away without
+  # changing the user. For Solaris this is mandatory. See readme for details.
+  SWITCH_USER=1
+fi
+
+
+# Check Linux release
+if [ -e /etc/SuSE-release ] ; then
+  LINUX_DISTRIBUTION=suse
+elif [ -e /etc/redhat-release ] ; then
+  LINUX_DISTRIBUTION=redhat
+else
+  LINUX_DISTRIBUTION=unknown
+fi
+
+# Special handling for RedHat start/stop
+if [ "$LINUX_DISTRIBUTION" = "redhat" ] ; then
+
+  if [ "$1" = "start" ] ; then
+   start_stop=1
+  elif [ "$1" = "restart" ] ; then
+   start_stop=1
+  elif [ "$1" = "stop" ] ; then
+   start_stop=1
+  fi
+
+  if [ "$start_stop" = "1" ] ; then
+    if [ ! -w /var/lock/subsys ] ; then
+      echo "On RedHat you can only start/stop the server with root-permissions"
+      whoami
+      exit 1
+    fi
+  fi
+fi
+
+# Run the main startup script
+if [ "$SWITCH_USER" = "0" ] ; then
+   $DOMINO_START_SCRIPT "$1" "$2" "$3" "$4"
+else
+  echo Switching to $DOMINO_USER
+  su - $DOMINO_USER -c "$DOMINO_START_SCRIPT '$1' '$2' '$3' '$4'"
+fi
+
+
+
+# Special handling for RedHat start/stop
+if [ "$LINUX_DISTRIBUTION" = "redhat" ] ; then
+
+  # Source function library.
+  . /etc/rc.d/init.d/functions
+
+  # Determine script name. for symbolic link check real name
+  script_name=$0
+  link_name=`readlink $script_name`
+  if [ -z "$link_name" ] ; then
+    link_name=$0
+  fi
+  prog=`basename $link_name`
+  RETVAL=$?
+
+  echo "Return Code: " $RETVAL
+
+  if [ "$1" = "start" ] ; then
+    touch /var/lock/subsys/$prog
+  elif [ "$1" = "restart" ] ; then
+    touch /var/lock/subsys/$prog
+  elif [ "$1" = "stop" ] ; then
+    rm -f /var/lock/subsys/$prog
+  fi
+
+  exit $RETVAL
+fi

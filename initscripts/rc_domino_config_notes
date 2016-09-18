@@ -1,0 +1,91 @@
+
+# mandatory configuration
+DOMINO_USER=notes
+LOTUS=/opt/ibm/domino
+DOMINO_DATA_PATH=/local/notesdata
+DOMINO_SHUTDOWN_TIMEOUT=600
+DOMINO_CONFIGURED="yes"
+
+# -- LANG setting on OS level that should be used.
+# new default is to use what is specified in user profile.
+#DOMINO_LANG=en_US.UTF-8
+#DOMINO_LANG=de_DE.UTF-8
+#DOMINO_LANG=en_US
+#DOMINO_LANG=de_DE
+
+# -- remove loadmon.ncf on startup
+DOMINO_RESET_LOADMON="yes"
+
+# -- run NSD before killing the Domino server when DOMINO_SHUTDOWN_TIMEOUT has been reached
+DOMINO_NSD_BEFORE_KILL="yes"
+
+# -- Shared DPOOLSIZE for Linux Tuning
+#DOMINO_SHARED_DPOOLSIZE=20971520
+
+# -- remove temp-files on startup
+#DOMINO_REMOVE_TEMPFILES="yes"
+
+# -- Domino Server Name if different from Linux/UNIX username
+#DOMINO_SERVER=$DOMINO_USER
+
+# -- Start Script Debuging
+#DOMINO_DEBUG_MODE="yes"
+
+# -- Optional Start Script Debug Output File
+#DOMINO_DEBUG_FILE=$DOMINO_DATA_PATH/debug_start_script.log
+
+# -- output/input log directory
+#DOMINO_LOG_DIR=/local/log
+
+# -- backup log directory
+#DOMINO_LOG_BACKUP_DIR=/local/log/backup
+
+# -- View Rebuild Dir to be created if not present (use notes.ini view_rebuild_dir to specify directory) --
+#DOMINO_VIEW_REBUILD_DIR="/tmp/$DOMINO_USER/view_rebuild"
+#DOMINO_VIEW_REBUILD_DIR="/dev/shm/$DOMINO_USER/view_rebuild"
+
+# -- Notes Temp Dir to be created if not present (use notes.ini notes_tempdir to specify directory) --
+#DOMINO_TEMP_DIR="/tmp/$DOMINO_USER/tempdir"
+
+# -- Notes Log Dir to be created if not present (use notes.ini logfile_dir to specify directory for IBM_TECHNICAL_SUPPORT, debug_outfile for console.log file) --
+#DOMINO_LOG_PATH="/tmp/$DOMINO_USER/log"
+
+# -- Command to execute before shutting down the Domino server --
+#DOMINO_PRE_SHUTDOWN_COMMAND="tell traveler quit"
+
+# -- Delay before shutting down the Domino server after invoking the pre-shutdown command --
+#DOMINO_PRE_SHUTDOWN_DELAY=30
+
+# -- Set the locale to POSIX (C) when running NSD --
+#NSD_SET_POSIX_LC="yes"
+
+# -- 3rd Party directories to check for running processes when cleaning up server resources --
+#DOMINO_3RD_PARTY_BIN_DIRS="/opt/your/bin/dir"
+
+# -- pre-shutdown script --
+#DOMINO_PRE_SHUTDOWN_SCRIPT=/etc/init.d/my_pre_shutdown_script
+
+# -- post-shutdown script --
+#DOMINO_POST_SHUTDOWN_SCRIPT=/etc/init.d/my_post_shutdown_script
+
+# -- pre-startup script --
+#DOMINO_PRE_STARTUP_SCRIPT=/etc/init.d/my_pre_startup_script
+
+# -- post-startup script --
+#DOMINO_POST_STARTUP_SCRIPT=/etc/init.d/my_post_startup_script
+
+# -- pre-kill script --
+#DOMINO_PRE_KILL_SCRIPT=/etc/init.d/my_pre_kill_script
+
+# -- post-startup script --
+#DOMINO_POST_KILL_SCRIPT=/etc/init.d/my_post_kill_script
+
+# -- pre-cleanup script --
+#DOMINO_PRE_CLEANUP_SCRIPT=/etc/init.d/my_pre_cleanup_script
+
+# -- post-cleanup script --
+#DOMINO_POST_CLEANUP_SCRIPT=/etc/init.d/my_post_cleanup_script
+
+# -- compact options --
+#DOMINO_START_COMPACT_OPTIONS="-C systemdbs.ind"
+#DOMINO_COMPACT_OPTIONS="-C systemdbs.ind"

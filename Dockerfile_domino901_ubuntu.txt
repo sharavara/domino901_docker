@@ -1,0 +1,34 @@
+FROM ubuntu:14.04
+
+ENV DOM_PKG=resources/domino_901
+ENV DOM_SCR=resources/initscripts
+ENV DOM_CONF=resources/serverconfig
+
+#nano install
+RUN apt-get update && apt-get install -y nano
+
+RUN useradd -ms /bin/bash notes
+RUN usermod -aG notes notes
+RUN usermod -d /local/notesdata notes
+RUN sed -i '$d' /etc/security/limits.conf
+RUN echo 'notes soft nofile 60000' >> /etc/security/limits.conf
+RUN echo 'notes hard nofile 80000' >> /etc/security/limits.conf
+RUN echo '# End of file' >> /etc/security/limits.conf
+
+COPY ${DOM_PKG}/ /tmp/sw-repo/
+COPY ${DOM_CONF}/ /tmp/sw-repo/serverconfig
+
+RUN mkdir -p /etc/sysconfig/
+COPY ${DOM_SCR}/rc_domino /etc/init.d/
+RUN chmod u+x /etc/init.d/rc_domino
+RUN chown root.root /etc/init.d/rc_domino
+COPY ${DOM_SCR}/rc_domino_script /opt/ibm/domino/
+RUN chmod u+x /opt/ibm/domino/rc_domino_script
+RUN chown notes.notes /opt/ibm/domino/rc_domino_script
+COPY ${DOM_SCR}/rc_domino_config_notes /etc/sysconfig/
+
+RUN /bin/bash -c "/tmp/sw-repo/domino/install -silent -options /tmp/sw-repo/serverconfig/domino901_response.dat"
+
+# Clean up
+RUN rm /tmp/* -R
+
