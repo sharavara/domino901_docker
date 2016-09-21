@@ -7,9 +7,12 @@ EXPOSE 25 80 443 1352 8585
 
 COPY resources/serversetup/* /local/notesdata/
 COPY resources/docker-entrypoint.sh /usr/local/bin/
+RUN chmod 775 usr/local/bin/docker-entrypoint.sh
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
+#RUN ls -la usr/local/bin/docker-entrypoint.sh
+#RUN ls -la /
 # Perform silent configuration of the server based on recorded profile
 #RUN su notes -c "cd /local/notesdata && /opt/ibm/domino/bin/server -silent /local/notesdata/Main_Server.pds"
 

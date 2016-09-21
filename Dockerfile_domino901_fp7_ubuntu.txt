@@ -1,9 +1,9 @@
 FROM vs/domino:9.0.1
 
-ENV DOM_PKG=resources/domino_901_fp7
+ENV DOM_PKG=resources/linux64
 ENV DOM_CONF=resources/serverconfig
 
-COPY ${DOM_PKG}/ /tmp/sw-repo/
+ADD  ${DOM_PKG}/ /tmp/sw-repo/
 COPY ${DOM_CONF}/ /tmp/sw-repo/serverconfig
 
 ENV NUI_NOTESDIR /opt/ibm/domino/
