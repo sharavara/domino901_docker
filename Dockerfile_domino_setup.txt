@@ -1,19 +1,13 @@
 FROM vs/domino:9.0.1-fp7
 
-# Set the init service as entrypoint to have domino start with the image
-#ENTRYPOINT exec /etc/init.d/rc_domino monitor
-#ENTRYPOINT su - notes -c "cd /local/notesdata; /opt/ibm/domino/bin/server"
 EXPOSE 25 80 443 1352 8585
 
-COPY resources/serversetup/* /local/notesdata/
-COPY resources/docker-entrypoint.sh /usr/local/bin/
-RUN chmod 775 usr/local/bin/docker-entrypoint.sh
-RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
-ENTRYPOINT ["/entrypoint.sh"]
+COPY resources/docker-entrypoint.sh /
+RUN chmod 775 /docker-entrypoint.sh
 
-#RUN ls -la usr/local/bin/docker-entrypoint.sh
-#RUN ls -la /
-# Perform silent configuration of the server based on recorded profile
-#RUN su notes -c "cd /local/notesdata && /opt/ibm/domino/bin/server -silent /local/notesdata/Main_Server.pds"
+USER notes
+WORKDIR /local/notesdata
+ENV LOGNAME=notes
+ENV PATH=$PATH:/opt/ibm/domino/
 
-VOLUME ["/local/notesdata"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
