@@ -1,0 +1,27 @@
+#Commands for a post in the my blog
+
+#start web server for static content
+docker run --name software -p 7777:80 -v /home/vs/software:/usr/share/nginx/html:ro -d nginx
+
+#download the file
+wget http://ubuntu02.local:7777/DOMINO_9.0.1_64_BIT_LIN_XS_EN.tar
+
+#build domino901 image. It takes about 10-12 min
+cd /docker/domino901
+docker build -t vs/domino:9.0.1 .
+
+#build domino901-fp7 image. It takes about 3-5 min
+cd /docker/domino901_fp7
+docker build -t vs/domino:9.0.1-fp7 .
+
+#build domino901fp7 image (Domino 9.0.1 + FP7 in one image). It takes about 13-15 min
+cd /docker/domino901fp7
+docker build -t vs/domino:9.0.1fp7 .
+
+#build server image
+docker build -t vs/domino_server:1.0 .
+
+#start container
+docker volume create --name=domino-sgn
+docker run -it -p 8080:80 -p 1352:1352 -p 8443:443 -p 2525:25  --name domino_sgn -v domino-sgn:/local/notesdata vs/domino_server:1.0
+docker start domino_sgn

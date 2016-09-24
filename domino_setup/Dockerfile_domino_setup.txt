@@ -1,6 +1,6 @@
-FROM vs/domino:9.0.1-fp7
+FROM vs/domino:9.0.1fp7
 
-EXPOSE 25 80 443 1352 8585
+EXPOSE 25 80 443 1352
 
 COPY resources/docker-entrypoint.sh /
 RUN chmod 775 /docker-entrypoint.sh
