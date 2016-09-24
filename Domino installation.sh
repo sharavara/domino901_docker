@@ -1,7 +1,7 @@
 ######################################################################
 #Host. Host system
 cd /home/vs/software/IBM_Domino_901_7/
-tar -xvf domino901FP5_aix64.tar
+tar -xvf DOMINO_9.0.1_64_BIT_LIN_XS_EN.tar
 mv linux64 domino_901
 tar -xvf \domino901FP7_linux64_x86.tar
 mv linux64 domino_901_fp7
@@ -39,7 +39,7 @@ apt-get install -y nano
 #Container. Manual installation
 cd $DOMINODIR/domino_901/domino
 #./install
-./install -silent -options $DOMINODIR/serverconfig/domino901_response.dat 
+./install -silent -options $DOMINODIR/serverconfig/domino901_response.dat
 
 ######################################################################
 #Container. Environment configuration
@@ -75,4 +75,3 @@ echo "export PATH" >> /local/notesdata/.profile
 su - notes -c "/opt/ibm/domino/bin/server –listen"
 su - notes -c "/opt/ibm/domino/rc_domino_script monitor"
 #su notes -c "cd /local/notesdata && /opt/ibm/domino/bin/server –listen"
-
