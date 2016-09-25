@@ -1,14 +1,14 @@
-#FROM ubuntu:14.04
-FROM vs/ubuntu:14.04
+FROM ubuntu:14.04
+#FROM vs/ubuntu:14.04
 
 ENV DOM_SCR=resources/initscripts
 ENV DOM_CONF=resources/serverconfig
 
 #install nano & wget
-#RUN apt-get update && \
-#    apt-get install -y nano && \
-#    apt-get install -y wget && \
-#    apt-get clean
+RUN apt-get update && \
+    apt-get install -y nano && \
+    apt-get install -y wget && \
+    apt-get clean
 
 RUN useradd -ms /bin/bash notes && \
     usermod -aG notes notes && \
